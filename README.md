@@ -44,7 +44,7 @@ Each action earns XP based on environmental impact.
 
 ---
 
-## 📊 Data Storage (Pandas CSV Database)
+## 📊 Data Storage (SQL Database)
 Sprout uses CSV files powered by Pandas to store:
 
 - Users
@@ -52,7 +52,6 @@ Sprout uses CSV files powered by Pandas to store:
 - Action history
 - XP progression
 
-No SQL database required.
 
 ---
 
