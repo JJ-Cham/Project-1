@@ -19,7 +19,6 @@ Every eco-friendly action (bike, walk, recycle, public transport) is tracked, co
 - Seedling 🌿  
 - Young Plant 🌿  
 - Blooming Plant 🌸  
-- Tree 🌳  
 
 ---
 

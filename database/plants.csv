@@ -1,2 +1,6 @@
 id,user_id,plant_name,xp,level,stage
+<<<<<<< HEAD
 1,1,Sproutly,36,1,Young Plant
+=======
+1,1,Sunflower,0,1,Seed
+>>>>>>> 0ed26255a4c0c30ec505fa1e18e4c7c23c9dff74
