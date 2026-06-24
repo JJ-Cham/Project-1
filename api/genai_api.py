@@ -24,4 +24,3 @@ def sprout_feedback(action, co2, plant_stage, curr_weather):
 		return client.models.generate_content(model='gemini-2.5-flash', contents=prompt).text
 	except: 
 		return "Thanks for helping me grow!"
-
