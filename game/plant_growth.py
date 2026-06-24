@@ -1,4 +1,5 @@
 import pandas as pd
+from api.carbon_api import carbon_saved
 from game.plant_art import PLANT_ART
 
 PLANTS_FILE = "database/plants.csv"
@@ -33,7 +34,8 @@ def update_plant_progression(user_id, weather_bonus, carbon_penalty):
     old_stage = str(plant_row["stage"])
 
     # determining growth with given integer data
-    base_growth = 5
+    base_growth = 0
+    growth_delta = int(carbon_saved * 10) + weather_bonus
     growth_delta = base_growth + int(weather_bonus) - int(carbon_penalty)
     new_xp = current_xp + growth_delta
 
