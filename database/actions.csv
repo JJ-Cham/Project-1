@@ -11,4 +11,7 @@ id,user_id,action_type,carbon_saved
 10,1.0,Recycling,5.0
 11,1.0,Recycling,5.0
 12,1.0,Recycling,5.0
-13,6,bike,1.0
+13,6.0,bike,1.0
+14,7.0,bike,1.0
+15,8.0,bike,1.0
+16,9,recycle,0.5
