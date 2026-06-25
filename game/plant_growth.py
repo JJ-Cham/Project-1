@@ -30,17 +30,15 @@ def update_plant_progression(user_id, weather_bonus, carbon_penalty, action_type
     current_xp = int(plant_row["xp"])
     old_stage = str(plant_row["stage"])
 
-    # FIX: properly compute carbon_saved
-    if action_type is not None and distance is not None:
-        carbon_value = carbon_saved(action_type, distance)
-    else:
-        carbon_value = 0
+    # determining growth with given integer data
+    base_growth = 0
+    growth_delta = int(carbon_saved * 10) + weather_bonus
+    growth_delta = base_growth + int(weather_bonus) - int(carbon_penalty)
+    new_xp = current_xp + growth_delta
 
-    carbon_value = 0  # handle None safely
-
-    growth_delta = int(carbon_value * 10) + int(weather_bonus) - int(carbon_penalty)
-
-    new_xp = max(0, current_xp + growth_delta)
+    # score never is below zero
+    if new_xp < 0:
+        new_xp = 0
 
     new_stage = get_stage(new_xp)
 
