@@ -1,9 +1,21 @@
+# from api.weather_api import suggest_action
+# from database.db import get_plant, get_actions, create_user, get_user, create_plant, init_db
+# from game.actions import perform_action
+# from api.genai_api import sprout_feedback
+# from sprout.game import plant_art
+# from sprout.game.plant_art import PLANT_ART
 from api.weather_api import suggest_action
-from database.db import get_plant, get_actions, create_user, get_user, create_plant, init_db
+from database.db import (
+    get_plant,
+    get_actions,
+    create_user,
+    get_user,
+    create_plant,
+    init_db,
+)
 from game.actions import perform_action
 from api.genai_api import sprout_feedback
-from sprout.game.plant_art import PLANT_ART
-
+from game.plant_art import PLANT_ART
 def main():
 
     init_db()

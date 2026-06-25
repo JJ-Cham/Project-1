@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from database.schema import Base, User, Plant, Action
 
 
-DATABASE_URL = "sqlite:///database/sprout.db"
+DATABASE_URL = "sqlite:///sprout/database/sprout.db"
 
 engine = create_engine(
     DATABASE_URL,
