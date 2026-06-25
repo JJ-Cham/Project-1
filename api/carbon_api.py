@@ -1,8 +1,12 @@
 import os
 
 import requests
+from dotenv import load_dotenv
 
-API_KEY = os.environ.get("CLIMATIQ_API_KEY")
+load_dotenv()
+
+CLIMATIQ_API_KEY = os.getenv("CLIMATIQ_API_KEY")
+
 ESTIMATE_URL = "https://api.climatiq.io/data/v1/estimate"
 
 ACTIVITY_IDS = {
@@ -10,13 +14,12 @@ ACTIVITY_IDS = {
     "bus": "passenger_vehicle-vehicle_type_bus-fuel_source_na-distance_na-engine_size_na",
 }
 
-
 def estimate_emissions(activity_id, distance_km):
-    if not API_KEY:
+    if not CLIMATIQ_API_KEY:
         print("Missing CLIMATIQ_API_KEY. Set it as an environment variable.")
         return None
 
-    headers = {"Authorization": f"Bearer {API_KEY}"}
+    headers = {"Authorization": f"Bearer {CLIMATIQ_API_KEY}"}
 
     payload = {
         "emission_factor": {
@@ -37,7 +40,8 @@ def estimate_emissions(activity_id, distance_km):
         return None
 
     data = response.json()
-    return data.get("co2e")
+    #return data.get("co2e")
+    return data.get("co2e") or data.get("result", {}).get("co2e")
 
 
 def carbon_saved(action_type, distance_km):
@@ -55,7 +59,7 @@ def carbon_saved(action_type, distance_km):
             return None
         return round(max(car_emissions - bus_emissions, 0), 3)
 
-    return 0.0
+    return None
 
 
 if __name__ == "__main__":

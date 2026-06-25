@@ -56,11 +56,10 @@ def perform_action(user_id, action_type, distance=0, city=""):
         0
     )
 
-    plant = get_plant(int(user_id))
-    #plant = get_plant(int(user_id))
+    plant = get_plant(user_id)
 
-    # if plant is None:
-    #     return "No plant found for this user."
+    if plant is None:
+        return "No plant found for this user."
 
 
 
@@ -70,7 +69,7 @@ def perform_action(user_id, action_type, distance=0, city=""):
     feedback = sprout_feedback(
         action_type,
         saved,
-        plant["stage"],
+        plant.stage,
         weather_desc
     )
 

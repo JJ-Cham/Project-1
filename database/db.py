@@ -1,118 +1,135 @@
-import pandas as pd
-import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-USERS_FILE = "database/users.csv"
-PLANTS_FILE = "database/plants.csv"
-ACTIONS_FILE = "database/actions.csv"
+from database.schema import Base, User, Plant, Action
+
+
+DATABASE_URL = "sqlite:///database/sprout.db"
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 
 def init_db():
+    Base.metadata.create_all(bind=engine)
 
-    if not os.path.exists(USERS_FILE):
-        pd.DataFrame(columns=["id", "username"]).to_csv(USERS_FILE, index=False)
 
-    if not os.path.exists(PLANTS_FILE):
-        pd.DataFrame(columns=[
-            "id", "user_id", "plant_name", "xp", "level", "stage"
-        ]).to_csv(PLANTS_FILE, index=False)
-
-    if not os.path.exists(ACTIONS_FILE):
-        pd.DataFrame(columns=[
-            "id", "user_id", "action_type", "carbon_saved"
-        ]).to_csv(ACTIONS_FILE, index=False)
+# -------------------------
+# USER FUNCTIONS
+# -------------------------
 
 def create_user(username):
-    df = pd.read_csv(USERS_FILE)
+    db = SessionLocal()
 
-    if username in df["username"].values:
-        return
+    existing = (
+        db.query(User)
+        .filter(User.username == username)
+        .first()
+    )
 
-    #new_id = len(df) + 1
-    new_id = df["id"].max() + 1 if not df.empty else 1
+    if existing:
+        db.close()
+        return existing
 
-    new_row = pd.DataFrame([{
-        "id": new_id,
-        "username": username
-    }])
+    user = User(username=username)
 
-    df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv(USERS_FILE, index=False)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    db.close()
+
+    return user
 
 
-# def get_user(username):
-#     df = pd.read_csv(USERS_FILE)
-#     user = df[df["username"] == username]
-
-#     if user.empty:
-#         return None
-
-#     return user.iloc[0]
 def get_user(username):
-    df = pd.read_csv(USERS_FILE)
-    user = df[df["username"] == username]
+    db = SessionLocal()
 
-    if user.empty:
-        return None
+    user = (
+        db.query(User)
+        .filter(User.username == username)
+        .first()
+    )
 
-    row = user.iloc[0]
+    db.close()
 
-    return {
-        "id": int(row["id"]),
-        "username": row["username"]
-    }
+    return user
+
+
+# -------------------------
+# PLANT FUNCTIONS
+# -------------------------
 
 def create_plant(user_id, plant_name):
-    df = pd.read_csv(PLANTS_FILE)
+    db = SessionLocal()
 
-    new_id = len(df) + 1
+    plant = Plant(
+        user_id=user_id,
+        plant_name=plant_name,
+        xp=0,
+        level=1,
+        stage="Seed"
+    )
 
-    new_row = pd.DataFrame([{
-        "id": new_id,
-        "user_id": user_id,
-        "plant_name": plant_name,
-        "xp": 0,
-        "level": 1,
-        "stage": "Seed"
-    }])
+    db.add(plant)
+    db.commit()
+    db.refresh(plant)
 
-    df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv(PLANTS_FILE, index=False)
+    db.close()
+
+    return plant
 
 
 def get_plant(user_id):
-    df = pd.read_csv(PLANTS_FILE)
+    db = SessionLocal()
 
-    df["user_id"] = df["user_id"].astype(int)
+    plant = (
+        db.query(Plant)
+        .filter(Plant.user_id == user_id)
+        .first()
+    )
 
-    plant = df[df["user_id"] == int(user_id)]
+    db.close()
 
-    if plant.empty:
-        return None
+    return plant
 
-    return plant.iloc[0]
+
+# -------------------------
+# ACTION FUNCTIONS
+# -------------------------
 
 def log_action(user_id, action_type, carbon_saved):
-    df = pd.read_csv(ACTIONS_FILE)
+    db = SessionLocal()
 
-    new_id = len(df) + 1
+    action = Action(
+        user_id=user_id,
+        action_type=action_type,
+        carbon_saved=carbon_saved
+    )
 
-    new_row = pd.DataFrame([{
-        "id": new_id,
-        "user_id": user_id,
-        "action_type": action_type,
-        "carbon_saved": carbon_saved
-    }])
+    db.add(action)
+    db.commit()
 
-    df = pd.concat([df, new_row], ignore_index=True)
-    df.to_csv(ACTIONS_FILE, index=False)
+    db.close()
 
 
-# def get_actions(user_id):
-#     df = pd.read_csv(ACTIONS_FILE)
-#     return df[df["user_id"] == user_id]
 def get_actions(user_id):
-    df = pd.read_csv(ACTIONS_FILE)
+    db = SessionLocal()
 
-    df["user_id"] = df["user_id"].astype(int)
+    actions = (
+        db.query(Action)
+        .filter(Action.user_id == user_id)
+        .all()
+    )
 
-    return df[df["user_id"] == int(user_id)]
+    db.close()
+
+    return actions

@@ -1,20 +1,25 @@
-import os
+# import os
 
 import requests
 
-API_KEY = os.environ.get("OPENWEATHER_API_KEY")
+# API_KEY = os.environ.get("OPENWEATHER_API_KEY")
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 def get_weather(city, units="metric"):
-    if not API_KEY:
+    if not OPENWEATHER_API_KEY:
         print("Missing OPENWEATHER_API_KEY. Set it as an environment variable.")
         return None
 
     params = {
         "q": city,
         "units": units,
-        "appid": API_KEY,
+        "appid": OPENWEATHER_API_KEY,
     }
 
     try:
@@ -25,21 +30,30 @@ def get_weather(city, units="metric"):
         return None
 
     data = response.json()
+    weather_list = data.get("weather", [{}])
+    main = weather_list[0] if weather_list else {}
 
     return {
         "city": data.get("name"),
-        "description": data["weather"][0]["description"],
-        "condition": data["weather"][0]["main"],
-        "temp": data["main"]["temp"],
-        "feels_like": data["main"]["feels_like"],
-        "humidity": data["main"]["humidity"],
-        "wind_speed": data["wind"]["speed"],
+        "description": main.get("description"),
+        "condition": main.get("main"),
+        "temp": data.get("main", {}).get("temp"),
+        "feels_like": data.get("main", {}).get("feels_like"),
+        "humidity": data.get("main", {}).get("humidity"),
+        "wind_speed": data.get("wind", {}).get("speed"),
     }
+    # return {
+    #     "city": data.get("name"),
+    #     "description": data["weather"][0]["description"],
+    #     "condition": data["weather"][0]["main"],
+    #     "temp": data["main"]["temp"],
+    #     "feels_like": data["main"]["feels_like"],
+    #     "humidity": data["main"]["humidity"],
+    #     "wind_speed": data["wind"]["speed"],
+    # }
 
 
-def is_good_weather(city):
-    weather = get_weather(city)
-
+def is_good_weather(weather):
     if weather is None:
         return None
 
@@ -53,7 +67,7 @@ def suggest_action(city):
     if weather is None:
         return "Could not fetch weather. Try logging a recycling action instead! ♻️"
 
-    if is_good_weather(city):
+    if is_good_weather(weather):
         return (
             f"It's {weather['description']} and {weather['temp']}° in "
             f"{weather['city']} — perfect for biking 🚴 or walking 🚶!"
