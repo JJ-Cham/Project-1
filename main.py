@@ -141,7 +141,7 @@ def display_plant(plant):
 
 
 print("\n🌱 Plant Message:")
-print(sprout_feedback)
+#print(sprout_feedback)
 
 if __name__ == "__main__":
     main()

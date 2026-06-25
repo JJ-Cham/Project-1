@@ -24,7 +24,6 @@ def perform_action(user_id, action_type, distance=0, city="Atlanta"):
         saved
     )
 
-    weather_bonus = int(saved)
 
     update_plant_progression(
         user_id,
@@ -33,6 +32,9 @@ def perform_action(user_id, action_type, distance=0, city="Atlanta"):
     )
 
     plant = get_plant(user_id)
+
+    if plant is None:
+        return "No plant found for this user."
 
     weather = get_weather(city)
 
@@ -44,8 +46,8 @@ def perform_action(user_id, action_type, distance=0, city="Atlanta"):
     feedback = sprout_feedback(
         action_type,
         saved,
-        plant["stage"],
-        weather_desc
+        weather_desc,
+        plant_stage = plant["stage"] if plant else "Seed"
     )
 
     return feedback
