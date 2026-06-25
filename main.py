@@ -1,27 +1,8 @@
 from api.weather_api import suggest_action
-from database.db import init_db, create_user, get_user, create_plant, get_plant, log_action, get_actions
-
-
-# def main():
-#     init_db()
-
-#     create_user("jake")
-#     user = get_user("jake")
-
-#     create_plant(user["id"], "Sunflower")
-#     plant = get_plant(user["id"])
-
-#     print("PLANT:")
-#     print(plant)
-
-#     log_action(user["id"], "bike", 1.8)
-
-#     actions = get_actions(user["id"])
-
-#     print("\nACTIONS:")
-#     print(actions)
-from database.db import *
+from database.db import get_plant, get_actions, create_user, get_user, create_plant, init_db
 from game.actions import perform_action
+from api.genai_api import sprout_feedback
+from sprout.game.plant_art import PLANT_ART
 
 def main():
 
@@ -35,14 +16,14 @@ def main():
 
     #create_plant(user["id"], plant_name)
 
-    plant = get_plant(user["id"])
+    plant = get_plant(user.id)
 
     if plant is None:
         plant_name = input("Plant name: ")
-        create_plant(user["id"], plant_name)
+        create_plant(user.id, plant_name)
 
         # reload plant after creation
-        plant = get_plant(user["id"])
+        plant = get_plant(user.id)
 
     while True:
 
@@ -60,16 +41,18 @@ def main():
 
         if choice == "1":
 
-            plant = get_plant(user["id"])
+            plant = get_plant(user.id)
 
             if plant is None:
                 print("🌱 Creating your first plant...")
                 plant_name = input("Plant name: ")
-                create_plant(user["id"], plant_name)
-                if plant["stage"] is None or plant["stage"] == "":
-                    plant["stage"] = "Seed"
+                create_plant(user.id, plant_name)
 
-                plant = get_plant(user["id"])  # reload
+                plant = get_plant(user.id)
+
+            display_plant(plant)
+            print(PLANT_ART[plant.stage])
+
 
         elif choice == "2":
 
@@ -77,7 +60,7 @@ def main():
             city = input("City: ")
 
             feedback = perform_action(
-                user["id"],
+                user.id,
                 "bike",
                 km,
                 city
@@ -92,7 +75,7 @@ def main():
             city = input("City: ")
 
             feedback = perform_action(
-                user["id"],
+                user.id,
                 "walk",
                 km,
                 city
@@ -108,7 +91,7 @@ def main():
             items = int(input("How many items did you recycle? "))
 
             feedback = perform_action(
-                user["id"],
+                user.id,
                 "recycle",
                 items,
                 city
@@ -122,7 +105,7 @@ def main():
             km = float(input("Distance (km): "))
 
             feedback = perform_action(
-                user["id"],
+                user.id,
                 "bus",
                 km
             )
@@ -135,8 +118,13 @@ def main():
             print(suggest_action(city))
 
         elif choice == "7":
-            history = get_actions(user["id"])
-            print(history)
+            history = get_actions(user.id)
+
+            for action in history:
+                print(
+                    f"{action.action_type} | "
+                    f"{action.carbon_saved} kg CO₂ saved"
+                )
 
         elif choice == "8":
             print("Goodbye 🌱")
@@ -148,11 +136,10 @@ def display_plant(plant):
     if plant is None:
         print("⚠️ No plant found. Please restart or create one.")
     else:
-        display_plant(plant)
-    print("Name:", plant["plant_name"])
-    print("XP:", plant["xp"])
-    print("Level:", plant["level"])
-    print("Stage:", plant["stage"])
+        print("Name:", plant.plant_name)
+        print("XP:", plant.xp)
+        print("Level:", plant.level)
+        print("Stage:", plant.stage)
 
 
 print("\n🌱 Welcome to Sprout!:")
