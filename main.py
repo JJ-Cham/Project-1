@@ -33,16 +33,16 @@ def main():
 
     user = get_user(username)
 
+    #create_plant(user["id"], plant_name)
+
     plant = get_plant(user["id"])
 
     if plant is None:
-
         plant_name = input("Plant name: ")
+        create_plant(user["id"], plant_name)
 
-        create_plant(
-            user["id"],
-            plant_name
-        )
+        # reload plant after creation
+        plant = get_plant(user["id"])
 
     while True:
 
@@ -62,7 +62,14 @@ def main():
 
             plant = get_plant(user["id"])
 
-            print(plant)
+            if plant is None:
+                print("🌱 Creating your first plant...")
+                plant_name = input("Plant name: ")
+                create_plant(user["id"], plant_name)
+                if plant["stage"] is None or plant["stage"] == "":
+                    plant["stage"] = "Seed"
+
+                plant = get_plant(user["id"])  # reload
 
         elif choice == "2":
 
@@ -98,10 +105,12 @@ def main():
 
             city = input("City: ")
 
+            items = int(input("How many items did you recycle? "))
+
             feedback = perform_action(
                 user["id"],
                 "recycle",
-                0,
+                items,
                 city
             )
 
@@ -112,11 +121,14 @@ def main():
 
             km = float(input("Distance (km): "))
 
-            perform_action(
+            feedback = perform_action(
                 user["id"],
                 "bus",
                 km
             )
+
+            print("\n🌱 Plant Message:")
+            print(feedback)
 
         elif choice == "6":
             city = input("City: ")
@@ -133,15 +145,19 @@ def main():
 def display_plant(plant):
 
     print("\n===== YOUR PLANT =====")
-
+    if plant is None:
+        print("⚠️ No plant found. Please restart or create one.")
+    else:
+        display_plant(plant)
     print("Name:", plant["plant_name"])
     print("XP:", plant["xp"])
     print("Level:", plant["level"])
     print("Stage:", plant["stage"])
 
 
-print("\n🌱 Plant Message:")
+print("\n🌱 Welcome to Sprout!:")
 #print(sprout_feedback)
 
 if __name__ == "__main__":
+
     main()
