@@ -1,6 +1,9 @@
 id,user_id,plant_name,xp,level,stage
-<<<<<<< HEAD
-1,1,Sproutly,36,1,Young Plant
-=======
-1,1,Sunflower,0,1,Seed
->>>>>>> 0ed26255a4c0c30ec505fa1e18e4c7c23c9dff74
+<<<<<<< HEAD,,,,,
+1,1.0,Sproutly,71.0,1.0,Blooming Plant
+=======,,,,,
+1,1.0,Sunflower,71.0,1.0,Blooming Plant
+>>>>>>> 0ed26255a4c0c30ec505fa1e18e4c7c23c9dff74,,,,,
+6,6.0,Sproutly,7.0,1.0,Seed
+7,7.0,Sproutly,42.0,1.0,Blooming Plant
+8,8,Flower,0.0,1.0,Seed

@@ -22,6 +22,7 @@ from database.db import init_db, create_user, get_user, create_plant, get_plant,
 #     print(actions)
 from database.db import *
 from game.actions import perform_action
+from api.genai_api import sprout_feedback
 
 def main():
 

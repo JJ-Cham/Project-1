@@ -10,7 +10,7 @@ from game.plant_growth import update_plant_progression
 # setup files
 init_db()
 
-username = "TestUser"
+username = "TestUser01"
 plant_name = "Sproutly"
 
 # get user
