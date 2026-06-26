@@ -1,8 +1,3 @@
-# import os
-
-# # allow gemini to run
-# from google import genai
-# from google.genai import errors
 import os
 from pathlib import Path
 
@@ -18,14 +13,6 @@ load_dotenv(ENV_PATH)
 def get_gemini_api_key():
     load_dotenv(ENV_PATH)
     return os.getenv("GEMINI_API_KEY")
-# ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
-
-# if os.path.exists(ENV_PATH):
-#     # safely extract the raw key string, discarding 'export', spaces, and quotes
-#     raw_content = open(ENV_PATH).read().split("=")[-1]
-#     os.environ["GEMINI_API_KEY"] = raw_content.replace("export", "").strip(' \n\r"\'')
-
-# API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # this function sends data to Gemini to return feedback on user action
 def sprout_feedback(action, co2, plant_stage, curr_weather):

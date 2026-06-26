@@ -46,15 +46,6 @@ def get_weather(city, units="metric"):
         "humidity": data.get("main", {}).get("humidity"),
         "wind_speed": data.get("wind", {}).get("speed"),
     }
-    # return {
-    #     "city": data.get("name"),
-    #     "description": data["weather"][0]["description"],
-    #     "condition": data["weather"][0]["main"],
-    #     "temp": data["main"]["temp"],
-    #     "feels_like": data["main"]["feels_like"],
-    #     "humidity": data["main"]["humidity"],
-    #     "wind_speed": data["wind"]["speed"],
-    # }
 
 
 def is_good_weather(weather):
