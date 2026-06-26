@@ -139,6 +139,7 @@ def main():
                 )
 
         elif choice == "8":
+            print("Thank you so much for using Sprout! 🌱")
             print("Goodbye 🌱")
             break
 
