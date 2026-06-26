@@ -1,25 +1,29 @@
-# import os
+import os
+from pathlib import Path
 
 import requests
-
-# API_KEY = os.environ.get("OPENWEATHER_API_KEY")
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
-import os
 from dotenv import load_dotenv
 
-load_dotenv()
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(ENV_PATH)
 
-OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
+def get_openweather_api_key():
+    load_dotenv(ENV_PATH)
+    return os.getenv("OPENWEATHER_API_KEY")
+
 
 def get_weather(city, units="metric"):
-    if not OPENWEATHER_API_KEY:
+    api_key = get_openweather_api_key()
+    if not api_key:
         print("Missing OPENWEATHER_API_KEY. Set it as an environment variable.")
         return None
 
     params = {
         "q": city,
         "units": units,
-        "appid": OPENWEATHER_API_KEY,
+        "appid": api_key,
     }
 
     try:

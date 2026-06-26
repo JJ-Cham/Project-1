@@ -4,16 +4,20 @@
 # from google import genai
 # from google.genai import errors
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from google import genai
 from google.genai import errors
 
-ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
-
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(ENV_PATH)
 
-API_KEY = os.getenv("GEMINI_API_KEY")
+
+def get_gemini_api_key():
+    load_dotenv(ENV_PATH)
+    return os.getenv("GEMINI_API_KEY")
 # ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
 
 # if os.path.exists(ENV_PATH):
@@ -25,11 +29,12 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 
 # this function sends data to Gemini to return feedback on user action
 def sprout_feedback(action, co2, plant_stage, curr_weather):
-    if not API_KEY:
+    api_key = get_gemini_api_key()
+    if not api_key:
         print("Missing GEMINI_API_KEY. Set it as an environment variable.")
         return None
 
-    client = genai.Client(api_key=API_KEY)
+    client = genai.Client(api_key=api_key)
 
     # incorporate the weather data
     weather_summary = "Unknown"
