@@ -5,10 +5,7 @@ from unittest.mock import patch
 
 import database.db as db
 
-
-# ----------------------------
 # Helper: create empty temp files
-# ----------------------------
 @pytest.fixture
 def temp_db(tmp_path):
     users = tmp_path / "users.csv"
@@ -23,9 +20,8 @@ def temp_db(tmp_path):
         yield
 
 
-# ----------------------------
+
 # Test init_db creates files
-# ----------------------------
 def test_init_db_creates_files(temp_db):
     db.init_db()
 
@@ -34,9 +30,7 @@ def test_init_db_creates_files(temp_db):
     assert os.path.exists(db.ACTIONS_FILE)
 
 
-# ----------------------------
 # Test create_user
-# ----------------------------
 def test_create_user(temp_db):
     db.init_db()
 
@@ -47,10 +41,7 @@ def test_create_user(temp_db):
     assert len(df) == 1
     assert df.iloc[0]["username"] == "jake"
 
-
-# ----------------------------
 # Test duplicate user is ignored
-# ----------------------------
 def test_create_duplicate_user(temp_db):
     db.init_db()
 
@@ -62,9 +53,7 @@ def test_create_duplicate_user(temp_db):
     assert len(df) == 1
 
 
-# ----------------------------
 # Test get_user
-# ----------------------------
 def test_get_user(temp_db):
     db.init_db()
 
@@ -84,9 +73,7 @@ def test_get_user_not_found(temp_db):
     assert user is None
 
 
-# ----------------------------
 # Test create_plant
-# ----------------------------
 def test_create_plant(temp_db):
     db.init_db()
 
@@ -100,10 +87,7 @@ def test_create_plant(temp_db):
     assert df.iloc[0]["level"] == 1
     assert df.iloc[0]["stage"] == "Seed"
 
-
-# ----------------------------
 # Test get_plant
-# ----------------------------
 def test_get_plant(temp_db):
     db.init_db()
 
@@ -123,9 +107,7 @@ def test_get_plant_not_found(temp_db):
     assert plant is None
 
 
-# ----------------------------
 # Test log_action
-# ----------------------------
 def test_log_action(temp_db):
     db.init_db()
 
@@ -137,10 +119,7 @@ def test_log_action(temp_db):
     assert df.iloc[0]["action_type"] == "bike"
     assert df.iloc[0]["carbon_saved"] == 10.5
 
-
-# ----------------------------
 # Test get_actions
-# ----------------------------
 def test_get_actions(temp_db):
     db.init_db()
 

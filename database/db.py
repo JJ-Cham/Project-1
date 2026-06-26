@@ -21,11 +21,7 @@ SessionLocal = sessionmaker(
 def init_db():
     Base.metadata.create_all(bind=engine)
 
-
-# -------------------------
 # USER FUNCTIONS
-# -------------------------
-
 def create_user(username):
     db = SessionLocal()
 
@@ -63,11 +59,7 @@ def get_user(username):
 
     return user
 
-
-# -------------------------
 # PLANT FUNCTIONS
-# -------------------------
-
 def create_plant(user_id, plant_name):
     db = SessionLocal()
 
@@ -101,11 +93,7 @@ def get_plant(user_id):
 
     return plant
 
-
-# -------------------------
 # ACTION FUNCTIONS
-# -------------------------
-
 def log_action(user_id, action_type, carbon_saved):
     db = SessionLocal()
 

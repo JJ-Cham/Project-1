@@ -3,10 +3,7 @@ from unittest.mock import patch
 
 from game.actions import perform_action
 
-
-# ----------------------------
 # Test: transport modes use carbon_saved
-# ----------------------------
 @patch("game.actions.sprout_feedback")
 @patch("game.actions.get_weather")
 @patch("game.actions.get_plant")
@@ -48,9 +45,7 @@ def test_perform_action_transport_modes(
     assert result == "ok"
 
 
-# ----------------------------
 # Test: invalid action defaults carbon to 0.5
-# ----------------------------
 @patch("game.actions.sprout_feedback")
 @patch("game.actions.get_weather")
 @patch("game.actions.get_plant")
@@ -85,9 +80,7 @@ def test_perform_action_invalid_action(
     assert result == "ok"
 
 
-# ----------------------------
 # Test: weather fallback
-# ----------------------------
 @patch("game.actions.sprout_feedback")
 @patch("game.actions.get_weather")
 @patch("game.actions.get_plant")
@@ -117,10 +110,7 @@ def test_weather_fallback(
     args = mock_feedback.call_args[0]
     assert args[-1] == "Unknown"
 
-
-# ----------------------------
 # Test: feedback input correctness
-# ----------------------------
 @patch("game.actions.sprout_feedback")
 @patch("game.actions.get_weather")
 @patch("game.actions.get_plant")
